@@ -1,6 +1,4 @@
 *** Settings ***
-
-Documentation               New test suite
 Library                     QWeb
 Library                     QForce
 Library                     DateTime
@@ -8,6 +6,7 @@ Library                     String
 Library                     FakerLibrary
 Suite Setup                 Open Browser                about:blank           chrome
 Suite Teardown              Close All Browsers
+
 *** Variables ***
 ${email}                  FakerLibrary.email
 ${BROWSER}                chrome
