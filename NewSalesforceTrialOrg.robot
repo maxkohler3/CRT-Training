@@ -8,7 +8,7 @@ Library                     String
 Suite Setup                 Open Browser                about:blank           chrome
 Suite Teardown              Close All Browsers
 *** Variables ***
-${email}                    *your email here*
+${email}                    xyz@gmail.com
 
 
 *** Test Cases ***
@@ -40,7 +40,8 @@ Creating Trial Org
 
 Create Case 
     [Documentation]       Create a case record
-    # Appstate              Home
+    ${home_url}           Set Variable         ${login_url}/lightning/page/home
+    Appstate              Home
 
     LaunchApp             Cases
     ClickText             New
@@ -64,7 +65,7 @@ Create Case
 
 Edit Case Record 
     [Documentation]       Edit case record in service cloud
-    # Appstate              Home
+    Appstate              Home
     LaunchApp             Cases
     ClickText             ${case_number}
     ClickText             Edit                        anchor=Delete
@@ -105,8 +106,9 @@ Entering A Lead
     ClickText                 Save                        partial_match=False
     UseModal                  Off
     Sleep                     1
-    
-    ClickText                 Details
+
+    #*** clicking wrong Details... solution- anchor=Activity
+    ClickText                 Details                     anchor=Activity
     VerifyField               Name                        Ms. Tina Smith
     VerifyField               Lead Status                 New
     VerifyField               Phone                       ${phone}
@@ -131,7 +133,9 @@ Converting A Lead To Opportunity-Account-Contact
     ClickText                 Leads
     ClickText                 Tina Smith
 
-    ClickUntil                Convert Lead                Convert
+    #*** Clicking wrong convert.... solution-  ClickText    Show more actions
+    ClickText    Show more actions
+    ClickUntil                Convert Lead                Convert     
     ClickText                 Opportunity                 2
     TypeText                  Opportunity Name            Growmore Pace
     ClickText                 Convert                     2
@@ -156,13 +160,16 @@ Creating An Account
 
     TypeText                  Account Name                Salesforce                  anchor=Parent Account
     TypeText                  Phone                       +12258443456789             anchor=Fax
-    TypeText                  Fax                         +12258443456766
+    
+    #*** there is no fax field... solution- remove below step
+    #TypeText                  Fax                         +12258443456766
     TypeText                  Website                     https://www.salesforce.com
     Picklist                  Type                        Partner
     Picklist                  Industry                    Finance
 
     TypeText                  Employees                   35000
-    TypeText                  Annual Revenue              12 billion
+    #*** there is no annual revenue field... solution- remove below step
+    #TypeText                  Annual Revenue              12 billion
     ClickText                 Save                        partial_match=False
 
     ClickText                 Details
@@ -187,7 +194,8 @@ Creating An Opportunity For The Account
     ClickText                 Next Month
     ClickText                 Today
 
-    Picklist                  Stage                       Prospecting
+    #*** there is no prospecting stage.... solution- update script to reflect actual picklist option (Proposal)
+    Picklist                  Stage                       Proposal
     TypeText                  Amount                      5000000
     Picklist                  Lead Source                 Partner
     TypeText                  Next Step                   Qualification
@@ -196,14 +204,17 @@ Creating An Opportunity For The Account
 
     Sleep                     1
     ClickText                 Opportunities
-    VerifyText                Safesforce Pace
+
+    #*** there is no Safesforce Pace opp.... solution- replace Safesforce with Growmore
+    VerifyText                Growmore Pace
 
 
 Change status of opportunity
     [tags]                    status_change
     Appstate                  Home
     ClickText                 Opportunities
-    ClickText                 Safesforce Pace             delay=2                     # intentionally delay action - 2 seconds
+    #*** there is no Safesforce Pace opp.... solution- replace Safesforce with Growmore
+    ClickText                 Growmore Pace             delay=2                     # intentionally delay action - 2 seconds
     VerifyText                Contact Roles
 
     ClickText                 Show actions for Contact Roles
@@ -221,9 +232,14 @@ Change status of opportunity
 
     ClickText                 Mark Stage as Complete
     ClickText                 Opportunities               delay=2
-    ClickText                 Safesforce Pace
-    VerifyStage               Qualification               true
-    VerifyStage               Prospecting                 false
+    #*** there is no Safesforce Pace opp.... solution- replace Safesforce with Growmore
+    ClickText                 Growmore Pace
+
+    #*** not in Qualification stage... solution- change stage to Needs Analysis
+    VerifyStage               Needs Analysis               true
+
+    #*** no Prospecting stage... solution- change stage to Qualification
+    VerifyStage               Qualification                 false
 
 
 Create A Contact For The Account
@@ -253,6 +269,9 @@ Create A Contact For The Account
 
 Delete Test Data
     [tags]                    Test data
+
+    #*** need to update cleanup......
+    
     Appstate                  Home
     LaunchApp                 Sales
     ClickText                 Accounts
