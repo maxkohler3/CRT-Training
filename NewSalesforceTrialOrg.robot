@@ -5,10 +5,15 @@ Library                     QWeb
 Library                     QForce
 Library                     DateTime
 Library                     String
+Library                     FakerLibrary
 Suite Setup                 Open Browser                about:blank           chrome
 Suite Teardown              Close All Browsers
 *** Variables ***
-${email}                    xyz@gmail.com
+${email}                  FakerLibrary.email
+${BROWSER}                chrome
+${username}               pace.delivery1@qentinel.com.demonew
+${login_url}              https://qentinel--demonew.my.salesforce.com/            # Salesforce instance. NOTE: Should be overwritten in CRT variables
+${home_url}               ${login_url}/lightning/page/home
 
 
 *** Test Cases ***
